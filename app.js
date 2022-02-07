@@ -3,6 +3,7 @@ const inputQty = document.querySelector("#cardQty");
 const btnQty = document.querySelector("#btnQty");
 const formQty = document.querySelector("#formQty");
 const cardContainer = document.querySelector("#cardContainer");
+const bubbleContainer = document.querySelector("#bubbleContainer");
 
 //funcion que crea el mazo de cartas
 const createDeck = () => {
@@ -27,9 +28,10 @@ window.onload = createDeck();
 let sortedCards = [];
 
 //funcion que obtiene cartas random segun la cantidad seleccionada
-const getQty = (e) => {
+const sortCards = (e) => {
   e.preventDefault();
   cardContainer.innerHTML = "";
+  bubbleContainer.innerHTML = "";
 
   for (let i = 0; i < inputQty.value; i++) {
     const random = Math.floor(Math.random() * 51);
@@ -40,7 +42,7 @@ const getQty = (e) => {
     sortedCards.push({ cardValor, cardPalo });
   }
   inputQty.value = "";
-  console.log(sortedCards);
+
   sortedCards.map((card) => {
     let entity;
     card.cardPalo === "Diamonds"
@@ -55,8 +57,38 @@ const getQty = (e) => {
     </div>
     `;
   });
+  bubbleSort(sortedCards);
+  sortedCards.map((card) => {
+    let entity;
+    card.cardPalo === "Diamonds"
+      ? (entity = "&diams;")
+      : (entity = `&${card.cardPalo.toLowerCase()};`);
+
+    bubbleContainer.innerHTML += `
+    
+    <div class="card ${card.cardPalo.toLowerCase()}">
+    <span>${entity}</span>
+    <p class="text-center m-0">${card.cardValor}</p>
+    <div class="d-flex justify-content-end"><span>${entity}</span></div>
+    </div>
+    `;
+  });
   sortedCards = [];
 };
 
+//funcion de bubble sort
+const bubbleSort = (arr) => {
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j < arr.length - 1; j++) {
+      if (arr[j].cardValor > arr[j + 1].cardValor) {
+        const curr = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = curr;
+      }
+    }
+  }
+  return arr;
+};
+
 //evento onsubmit del form
-formQty.addEventListener("submit", getQty);
+formQty.addEventListener("submit", sortCards);
