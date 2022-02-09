@@ -80,8 +80,11 @@ const sortCards = (e) => {
 const bubbleSort = (arr) => {
   for (let i = 0; i < arr.length - 1; i++) {
     for (let j = 0; j < arr.length - 1; j++) {
+      const curr = arr[j];
       if (arr[j].cardValor > arr[j + 1].cardValor) {
-        const curr = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = curr;
+      } else if (["Q", "A", "J", "K"].includes(arr[j].cardValor)) {
         arr[j] = arr[j + 1];
         arr[j + 1] = curr;
       }
